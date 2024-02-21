@@ -1,16 +1,9 @@
-##### Dockerfile #####
-## build stage ##
-FROM node:18.18-alpine as build
-
-WORKDIR /21
-COPY . .
-RUN npm install
-RUN npm run build
-
-# ## run stage ##
-# FROM nginx:alpine
-
-# COPY --from=build /21/build /usr/share/nginx/html
-
-EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:13.12.0-alpine
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install --silent
+RUN npm install react-scripts@4.0.3 -g --silent
+COPY . ./
+CMD ["npm", "start"]
